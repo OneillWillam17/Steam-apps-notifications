@@ -9,4 +9,4 @@ notificaion to the user's phone (provided they have a pushbullet account, and ap
 and delete the original. 
 
 # Push Notification example
-https://cdn.discordapp.com/attachments/619691677329784832/1008839848511160351/Screenshot_20220815-164624_Nova7.jpg
+![discord](https://media.discordapp.net/attachments/628690392103125013/1008892921245863946/Screenshot_20220815-164624_Nova7resized.jpg?width=328&height=675)
