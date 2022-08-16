@@ -71,13 +71,11 @@ def search_for_discounted_games(app_ids: list, app_str: str, discount_rate: int 
                             with open('discounted_games.txt', 'a') as file:
                                 file.write('\n')
                                 json.dump(steam_response[app], file)
-                                # file.write(f'\n{steam_response[app]["name"]} | {steam_response[app]["data"]["price_overview"]["discount_percent"]}% off | {steam_response[app]["data"]["price_overview"]["final_formatted"]}')
+                                
                         except FileNotFoundError:
                             with open('discounted_games.txt', 'w') as file:
                                 json.dump(steam_response[app], file)
-                                # file.write(f'{steam_response[app]["name"]} | {steam_response[app]["data"]["price_overview"]["discount_percent"]}% off | {steam_response[app]["data"]["price_overview"]["final_formatted"]}')
-
-                        # print(f'{steam_response[app]["name"]} | {steam_response[app]["data"]["price_overview"]["discount_percent"]}% off | {steam_response[app]["data"]["price_overview"]["final_formatted"]}')
+                                
                         break
             else:
                 # app has all the data necessary but is not currently on sale / free to keep.
