@@ -5,6 +5,31 @@ from notifications import Notification
 from datetime import datetime
 
 
+def log(txt: str, output=True):
+    """
+    Since this program is intended to be run once a day in the background, its unlikely that the user will be able to
+    see all the information outputted in the console. This function is a simple logger that will save any information
+    entered in the arguement txt. Can also print the same information by altering the arg output.
+
+    :param txt: String, whatever info you want to save to the log.txt file
+    :param output: Bool, default is True. If True it will also print out the information in arg txt
+    :return: N/A
+    """
+    try:
+        with open('log.txt', 'a') as file:
+            date = datetime.now().strftime('%Y-%m-%d')
+            time = datetime.now().strftime('%H:%M:%S')
+            file.write(f'{date} {time} | {txt}\n')
+    except FileNotFoundError:
+        with open('log.txt', 'w') as file:
+            date = datetime.now().strftime('%Y-%m-%d')
+            time = datetime.now().strftime('%H:%M:%S')
+            file.write(f'{date} {time} | {txt}\n')
+    else:
+        if output:
+            print(txt)
+
+
 def filter_no_name(app: dict):
     """
     for use to filter out games without a name from the steam GetAppList
@@ -66,16 +91,15 @@ def search_for_discounted_games(app_ids: list, app_str: str, discount_rate: int 
                         # adding the name to the corresponding app information
                         # so the user can better understand which games are on sale
                         steam_response[app]['name'] = appid['name']
-                        print(f'Discounted app found: {appid["name"]}')
+                        log(f'Discounted app found: {appid["name"]}')
                         try:
                             with open('discounted_games.txt', 'a') as file:
                                 file.write('\n')
                                 json.dump(steam_response[app], file)
-                                
                         except FileNotFoundError:
                             with open('discounted_games.txt', 'w') as file:
                                 json.dump(steam_response[app], file)
-                                
+
                         break
             else:
                 # app has all the data necessary but is not currently on sale / free to keep.
@@ -92,9 +116,9 @@ def main():
     start = 0
     end = 750
     base_app_list = list(get_gamelist())
-    print(f"Total amount of apps to search: {len(base_app_list)} apps")
+    log(f"Total amount of apps to search: {len(base_app_list)} apps")
     while end < len(base_app_list):
-        print(f'Apps: {start} - {end}')
+        log(f'Apps: {start} - {end}')
         app_ids = base_app_list[start:end]
         app_str = to_csv_str(app_ids)
         search_for_discounted_games(app_ids=app_ids, app_str=app_str, discount_rate=100)
@@ -105,10 +129,10 @@ def main():
 
 if __name__ == '__main__':
     time1 = datetime.now()
-    print(f"Starting search for discounted games.... {time1}")
+    log(f"Starting search for discounted games...")
     main()
     time2 = datetime.now()
-    print(f"Search finished, sending notifications now... {time2}")
-    print(f"Runtime of search was {time2 - time1}")
+    log(f"Search finished, sending notifications now...")
+    log(f"Runtime of search was {time2 - time1}")
     notif = Notification()
     notif.send_notif()
